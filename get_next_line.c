@@ -24,12 +24,22 @@ static void ft_bzero(char *str, int size)
 	}
 }
 
+int ft_strlen(str)
+{
+	int i;
+
+	i = 0;
+	while (str[i])
+		i++;
+	return (i);
+}
+
 static char *ft_realloc(char *str, int size)
 {
 	char *new_str;
 	int i;
 
-	if((new_str = malloc(size)) == NULL)
+	if((new_str = malloc(size + ft_strlen(str))) == NULL)
 		return (NULL);
 	ft_bzero(new_str, size);
 	ft_strcat(new_str, str);
@@ -51,44 +61,73 @@ int ft_len_before_nl(char *str)
 	return (-1);
 }
 
+int has_nw(char *str)
+{
+	int i;
+
+	i = 0;
+	while (str[i] != '\0')
+	{
+		if (str[i] == '\n')
+			return (i);
+		i++;
+	}
+	return (0);
+}
+
+
+char *clean_str(char *str, len)
+{
+	char *new_str;
+
+	str += len;
+}
+
 int get_next_line(int fd, char **s)
 {
 	char buff[BUFF_SIZE + 1];
 	(void)s;
 	int ret;
-	int row;
 	int i;
-	static char *str;
-	static int call_nb = 1;
-	static int is_filled = 0;
+	int len;
+	static char *str = {'\0'};
 
 	if (BUFF_SIZE <= 0)
 		return (-1);
 	i = 0;
-	row = BUFF_SIZE;
-	if (is_filled == 0)
+	if (str[0] == '\0')
+	{
+		free(str);
 		if((str = malloc(BUFF_SIZE)) == NULL)
 			return (-1);
-	while ((ret = read(fd, buff, BUFF_SIZE)) > 0)
+	}
+	while (len = has_nw(str) == 0 && ret = read(fd, buff, BUFF_SIZE) > 0)
 	{
-		row += ret;
-		if ((str = ft_realloc(str, row)) == NULL)
+		if ((str = ft_realloc(str, ret)) == NULL)
 			return (-1);
 		buff[ret] = '\0';
 		ft_strcat(str, buff);
-		is_filled = 1;
-		if (ret < BUFF_SIZE)
-			break;
 	}
-	while (str[i] && str[i] != '\n')
-		i++;
-	if (str[i] == '\n')
+	if (len > 0)
 	{
-		write(1, str, i + 1);
-		str += i + 1;
-		return (1);
+		s = malloc(len);
+		while (str[i] != '\n')
+		{
+			s[i] = str[i];
+			i++;
+		}
+		s[i] = '\0';
 	}
-	return (0);
+	str = clean_str(str, len);
+//	while (str[i] && str[i] != '\n')
+//		i++;
+//	if (str[i] == '\n')
+//	{
+//		write(1, str, i + 1);
+//		str += i + 1;
+//		return (1);
+//	}
+//	return (0);
 }
 
 int main(int argc, char **argv)

@@ -35,15 +35,18 @@ char *ft_send_clean(char *s, char *str, int nl_index)
 	int i;
 	char *new_str;
 
+	i = 0;
 	s = malloc(nl_index + 1);
 	new_str = malloc(ft_strlen(str) - nl_index + 1);
-	                                                           //si nl_index = 0?
+	dprintf(1, "nl_index = %d\n", nl_index);
 	while (i < nl_index)
 	{
 		s[i] = str[i];
 		i++;
 	}
+	dprintf(1, "i = %d\n", i);
 	s[i] = '\0';
+	i = 0;
 	while (str[nl_index + i])
 	{
 		new_str[i] = str[nl_index + i];
@@ -119,13 +122,12 @@ int get_next_line(int fd, char **line)
 
 int main()
 {
-	char *s;
+	char **s = NULL;
 	int fd;
-	int i;
 
 	if ((fd = open("PAGE", O_RDONLY)) == -1)
 		return (-1);
-	while (get_next_line(fd, &s) != 0)
-		printf("%s\n", s);
+	while (get_next_line(fd, s) != 0)
+		printf("%s\n", s[0]);
 	return (0);
 }

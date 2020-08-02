@@ -19,7 +19,7 @@ char *ft_send_&_clean(char *s, char *str, int nl_index)
 
 	s = malloc(nl_index + 1);
 	new_str = malloc(ft_strlen(str) - nl_index + 1);
-	//si nl_index = 0?
+	                                                           //si nl_index = 0?
 	while (i < nl_index)
 	{
 		s[i] = str[i];
@@ -36,68 +36,69 @@ char *ft_send_&_clean(char *s, char *str, int nl_index)
 	return (new_str);
 }
 
-char *ft_realcat(char *str, char *buff)
+int ft_strlen(char *str)
 {
 	int i;
 
 	i = 0;
-	new_str = malloc(ft_strlen(str) + ft_strlen(buff) + 1);
+	while (str[i])
+		i++;
+	return (i);
+}
+
+char *ft_catfree(char *str, char *buff)
+{
+	char *new_str;
+	int i;
+	int j;
+	int len;
+
+	i = 0;
+	j = 0;
+	len = ft_strlen(str) + ft_strlen(buff);
+	new_str = malloc(len + 1);
 	while (str[i])
 	{
 		new_str[i] = str[i];
 		i++;
 	}
-	free(str);
-	while (*buff)
+	while (buff[j])
 	{
-		new_str[i] = buff;
-		buff++;
+		new_str[i] = buff[j];
+		j++;
+		i++;
 	}
+	new_str[i] = '\0';
+	free(str);
 	free(buff);
 	return (new_str);
 }
 
 int get_next_line(int fd, char **line)
 {
-	int i;
 	int nl_index;
-	char *buff;
-	static char str = {'\0'};
+	static char *str = {'\0'};
+	char buff[BUFF_SIZE + 1];
 
-	i = 0;
 	if ((nl_index = ft_nl_index(str)) > 0)
-	{
-		ft_send_&_clean(line, str, nl_index);
-		return (1);
-	}
-	nl_index = 0;
+		str = ft_send_&_clean(line[0], str, nl_index);
 	else
 		while (read(fd, buff, BUFF_SIZE) > 0 && (nl_index = ft_nl_index(str)) == 0)
-			str = ft_realcat(str, buff);
+			str = ft_catfree(str, buff);
 	if (nl_index == 0)
 	{
-		if (str[0] = '\0')
-			return (0);
-		else
-		{
-			while (str[i])
-			{
-				line[i] = str[i];
-				i++;
-			}
-			free(str);
-			free(buff);
-			return (1);
-		}
+		str = ft_send_&_clean(line[0], str, ft_strlen(str));
+		free(str);
 	}
 	else
-	{
-		ft_send_&_clean(line, str, nl_index);
-		return (1);
-	}
+		str = ft_send_&_clean(line[0], str, nl_index);
 }
 
 int main()
 {
-
+	if ((fd = open("PAGE", O_RDONLY)) == -1)
+		return (-1);
+	while (get_next_line(fd, &s) != 0)
+		i++;
+	return (0);
 }

@@ -4,25 +4,22 @@
 #include "get_next_line.h"
 #include <unistd.h>
 
-int ft_nl_index(char **str)
+char *ft_nl_index(char *str, int *nl_index)
 {
 	int i;
 
-	i = -1;
-	if (*str == NULL)
+	i = 0;
+	if (str == NULL)
 	{
-		if(!(*str = (char *)malloc(sizeof(char) * (BUFF_SIZE + 1))))
-				{
-					printf("Malloc error");
-				}
-		while (++i <= BUFF_SIZE)
-			(*str)[i] = '\0';
+		str = (char *)malloc(sizeof(char) * (BUFF_SIZE + 1));
+		while (i <= BUFF_SIZE)
+			str[i++] = '\0';
 	}
 	else
-		while ((*str)[++i])
-			if ((*str)[i] == '\n')
-				return (i);
-	return (-1);
+		while (str[i])
+			if (str[i++] == '\n')
+				*nl_index = i - 1;
+	return (str);
 }
 
 int ft_strlen(char *str)
@@ -30,7 +27,7 @@ int ft_strlen(char *str)
 	int i;
 
 	i = 0;
-	while (str && str[i])
+	while (str[i])
 		i++;
 	return (i);
 }
@@ -49,10 +46,9 @@ char *ft_send_clean(char **s, char *str, int nl_index)
 	}
 	(*s)[i] = '\0';
 	i = 0;
-	//new_str = (char*)malloc(sizeof(char)*(ft_strlen(str) - nl_index + 1));
 	if (nl_index != ft_strlen(str))
 	{
-		new_str = (char*)malloc(sizeof(char)*(ft_strlen(str) - nl_index + 1));
+		new_str = (char*)malloc(sizeof(char) * (ft_strlen(str) - nl_index + 1));
 		while (str[nl_index + i + 1])
 		{
 			new_str[i] = str[nl_index + i + 1];
@@ -61,11 +57,9 @@ char *ft_send_clean(char **s, char *str, int nl_index)
 		new_str[i] = '\0';
 	}
 	free(str);
-	str = NULL;
 	if (nl_index != ft_strlen(str))
 		return (new_str);
-	else
-		return (NULL);
+	return (NULL);
 }
 
 char *ft_catfree(char *str, char *buff, int len)
@@ -90,10 +84,7 @@ char *ft_catfree(char *str, char *buff, int len)
 		j++;
 		i++;
 	}
-	new_str[i] = '\0';
-	//if (str != NULL)
-	//	free(str);
-	//str = NULL;
+	free(str);
 	return (new_str);
 }
 
@@ -102,23 +93,21 @@ int get_next_line(int fd, char **line)
 	int nl_index;
 	char buff[BUFF_SIZE + 1];
 	static char *str = NULL;
-	
-	int	len = 0;
+	int len;
 
-	if ((nl_index = ft_nl_index(&str)) >= 0)
+	str = ft_nl_index(str, &nl_index);
+	if (nl_index > 0)
 		str = ft_send_clean(line, str, nl_index);
 	else
 	{
-		while (((nl_index = ft_nl_index(&str)) == -1 && (len = read(fd, buff, BUFF_SIZE))) > 0)
+		while ((str = ft_nl_index(str, &nl_index)) == 0 && (len = read(fd, buff, BUFF_SIZE)) > 0)
 			str = ft_catfree(str, buff, len);
-		if ((nl_index = ft_nl_index(&str)) == -1)
+		if (len == 0)
 		{
 			str = ft_send_clean(line, str, ft_strlen(str));
-			printf("str: %s, line[0]: %s\n", str, line[0]);
 			free(str);
 			str = NULL;
-			if (len == 0)
-				return (0);
+			return (0);
 		}
 		else
 			str = ft_send_clean(line, str, nl_index);
@@ -128,12 +117,13 @@ int get_next_line(int fd, char **line)
 
 int main()
 {
-	char *s = NULL;
+	char **s = NULL;
 	int fd;
-	
+
 	if ((fd = open("PAGE", O_RDONLY)) == -1)
 		return (-1);
-	while (get_next_line(fd, &s) != 0)
-		printf("%s\n", s);
+	while (get_next_line(fd, s) != 0)
+		printf("%s\n", s[0]);
 	return (0);
 }
+

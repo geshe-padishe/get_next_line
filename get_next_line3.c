@@ -38,6 +38,7 @@ char *ft_send_clean(char **s, char *str, int nl_index)
 	char *new_str = NULL;
 
 	i = 0;
+	free(s);
 	*s = (char*)malloc(sizeof(char) * (nl_index + 1));
 	while (i < nl_index)
 	{

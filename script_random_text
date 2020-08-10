@@ -2,10 +2,12 @@ for i in {0..100}
 do
 	printf "%d", "$i"
 	rm -rf PAGE PAGE2
-	< /dev/urandom tr -dc "\n\ts" | head -c10 > PAGE
-	./a.out > PAGE2
+	rm -rf file
+	./file_gen file 100 10 > PAGE
+	nohup ./a.out file > PAGE2
+	leaks a.out
 	DIFF=$(diff PAGE PAGE2) > DIFF
-	if [ "$DIFF" != "" ]
+	if [ -s DIFF ]
 	then
 		printf "\n_____________________________\n DIFF = "
 		cat DIFF

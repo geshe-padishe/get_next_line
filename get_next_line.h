@@ -3,7 +3,7 @@
 
 
 
-# define BUFF_SIZE 2
+# define BUFF_SIZE 128
 
 #include <stdlib.h>
 #include <fcntl.h>

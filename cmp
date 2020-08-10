@@ -1,0 +1,40 @@
+Process:         a.out [10097]
+Path:            /Users/USER/Desktop/*/a.out
+Load Address:    0x104f62000
+Identifier:      a.out
+Version:         ???
+Code Type:       X86-64
+Parent Process:  zsh [1855]
+
+Date/Time:       2020-08-10 22:40:48.100 +0200
+Launch Time:     2020-08-10 22:40:48.004 +0200
+OS Version:      Mac OS X 10.15.6 (19G73)
+Report Version:  7
+Analysis Tool:   /usr/bin/leaks
+----
+
+leaks Report Version: 4.0
+Process 10097: 154 nodes malloced for 12 KB
+Process 10097: 0 leaks for 0 total leaked bytes.
+
+PUTE
+
+
+
+
+V3d
+D(
+>L
+V)1
+p=*@`WwYH7
+idL
+
+|
+
+N
+wRV9"S
+fHC6R
+bh*@KjE
+
+J^72+Y9V
+)6

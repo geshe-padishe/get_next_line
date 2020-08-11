@@ -35,7 +35,7 @@ char *ft_send_clean(char **s, char *str, int nl_index)
 
 	i = 0;
 	*s = (char*)malloc(sizeof(char) * (nl_index + 1));
-	while (i < nl_index)
+	while (i < nl_index - 1)
 	{
 		(*s)[i] = str[i];
 		i++;
@@ -89,14 +89,14 @@ char *ft_realloc(char *str, char *buff, int len)
 int get_next_line(int fd, char **line)
 {
 	int nl_index;
-	char buff[BUFF_SIZE + 1];
+	char buff[BUFFER_SIZE + 1];
 	static char *str = NULL;
 	int	len;
 
-	if ((!(*str) && !(*str = malloc(sizeof(char) * (BUFF_SIZE + 1))))
-		|| (*str[0] = 0))
+	if ((!str && !(str = malloc(sizeof(char) * (BUFFER_SIZE + 1))))
+		|| (str[0] = 0))
 		return (-1);
-	while ((nl_index = ft_nl_index(str)) == 0 && (len = read(fd, buff, BUFF_SIZE)) > 0)
+	while ((nl_index = ft_nl_index(str)) == 0 && (len = read(fd, buff, BUFFER_SIZE)) > 0)
 		if (!(str = ft_realloc(str, buff, len)))
 			return (-1);
 	if ((nl_index = ft_nl_index(str)) == 0 || nl_index == ft_strlen(str))
@@ -112,19 +112,19 @@ int get_next_line(int fd, char **line)
 	return (1);
 }
 
-int main(int ac, char **av)
-{
-	char *s = NULL;
-	int fd;
-(void)ac;	
-	if ((fd = open(av[1], O_RDONLY)) == -1)
-		return (-1);
-	while (get_next_line(fd, &s) != 0)
-	{
-		printf("%s", s);
-		free(s);
-		s = NULL;
-	}
-	system("leaks a.out");
-	return (0);
-}
+//int main(int ac, char **av)
+//{
+//	char *s = NULL;
+//	int fd;
+//(void)ac;	
+//	if ((fd = open(av[1], O_RDONLY)) == -1)
+//		return (-1);
+//	while (get_next_line(fd, &s) != 0)
+//	{
+//		printf("%s", s);
+//		free(s);
+//		s = NULL;
+//	}
+////	system("leaks a.out");
+//	return (0);
+//}

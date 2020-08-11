@@ -3,8 +3,7 @@
 
 
 
-# define BUFF_SIZE 128
-
+int get_next_line(int e, char **s);
 #include <stdlib.h>
 #include <fcntl.h>
 

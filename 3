@@ -6,7 +6,7 @@
 /*   By: ngenadie <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/13 20:17:46 by ngenadie          #+#    #+#             */
-/*   Updated: 2020/09/01 20:39:26 by user42           ###   ########.fr       */
+/*   Updated: 2020/09/01 19:51:08 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,13 +57,9 @@ char	*ft_send_clean(char **s, char *str, int nl_index)
 	i = 0;
 	if (nl_index + 1 != ft_strlen(str))
 	{
-		printf("coucou\n");
 		new_str = (char*)malloc(sizeof(char) * (ft_strlen(str) - nl_index + 1));
-		while (str[nl_index + i])
-		{
-			new_str[i] = str[nl_index + i];
-			i++;
-		}
+		while (str[nl_index + ++i + 1])
+			new_str[i] = str[nl_index + i + 1];
 		new_str[i] = '\0';
 	}
 	free(str);
@@ -108,18 +104,14 @@ int		get_next_line(int fd, char **line)
 	int			len;
 	static int count = 0;
 
-	if ((!str && !(str = malloc(sizeof(char) * (BUFFER_SIZE + 1))))
-		|| (str[0] = 0) || BUFFER_SIZE <= 0)
+	if ((!str && !(str = malloc(sizeof(char) * (BUFFER_SIZE + 1)))
+		&& (str[0] = 0) ) || BUFFER_SIZE <= 0)
 		return (-1);
-	printf("str_bw: %s\n", str);
+	printf("str[0]: %c\n", str[0]);
 	while ((nl_index = ft_nl_index(str)) == 0 &&
 			(len = read(fd, buff, BUFFER_SIZE)) > 0)
-	{
-		printf("str_iw: %s\n", str);
 		if (!(str = ft_realloc(str, buff, len)))
 			return (-1);
-	}
-	printf("str_aw: %s\n", str);
 	if ((nl_index = ft_nl_index(str)) == 0 || nl_index + 1 == ft_strlen(str))
 	{
 		str = ft_send_clean(line, str, ft_strlen(str));
@@ -129,8 +121,8 @@ int		get_next_line(int fd, char **line)
 	else
 		str = ft_send_clean(line, str, nl_index);
 	//printf("str: %s\nnl_index: %i\nbuff:%s", str, nl_index, buff);
-	if (len == 0 && str == NULL)
-		return 0;
+	if (len == 0)
+		return (0);
 	return (1);
 }
 
@@ -148,8 +140,6 @@ int main(int ac, char **av)
 		return (-1);
 	while ((ret = get_next_line(fd, &s)) != 0)
 	{
-		if (ret == -1)
-			return -1;
 		printf("line: %s\n", s);
 		free(s);
 		s = NULL;

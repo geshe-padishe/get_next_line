@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   get_next_line2.c                                   :+:      :+:    :+:   */
+/*   get_next_line.c                                   :+:      :+:    :+:    */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ngenadie <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: ngenadie <ngenadie@42.fr>                    +#+  +:+       +#+      */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/13 20:17:46 by ngenadie          #+#    #+#             */
-/*   Updated: 2020/09/01 20:39:26 by user42           ###   ########.fr       */
+/*   Updated: 2020/09/10 18:49:25 by ngenadie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,16 +48,16 @@ char	*ft_send_clean(char **s, char *str, int nl_index)
 	i = 0;
 	new_str = NULL;
 	*s = (char*)malloc(sizeof(char) * (nl_index + 1));
-	while (i < nl_index - 1 && (*s)[i] != '\n')
+	while (str[i] && str[i] != '\n')
 	{
 		(*s)[i] = str[i];
 		i++;
 	}
 	(*s)[i] = '\0';
 	i = 0;
-	if (nl_index + 1 != ft_strlen(str))
+	if (nl_index != 0)
 	{
-		printf("coucou\n");
+		//printf("coucou\n");
 		new_str = (char*)malloc(sizeof(char) * (ft_strlen(str) - nl_index + 1));
 		while (str[nl_index + i])
 		{
@@ -108,19 +108,15 @@ int		get_next_line(int fd, char **line)
 	int			len;
 	static int count = 0;
 
-	if ((!str && !(str = malloc(sizeof(char) * (BUFFER_SIZE + 1))))
-		|| (str[0] = 0) || BUFFER_SIZE <= 0)
-		return (-1);
-	printf("str_bw: %s\n", str);
+	len = 1;
+	if (str == NULL)
+		if ((!(str = malloc(BUFFER_SIZE + 1)) && !(str[BUFFER_SIZE] = 0)) || BUFFER_SIZE <= 0)
+			return (-1);
 	while ((nl_index = ft_nl_index(str)) == 0 &&
 			(len = read(fd, buff, BUFFER_SIZE)) > 0)
-	{
-		printf("str_iw: %s\n", str);
 		if (!(str = ft_realloc(str, buff, len)))
 			return (-1);
-	}
-	printf("str_aw: %s\n", str);
-	if ((nl_index = ft_nl_index(str)) == 0 || nl_index + 1 == ft_strlen(str))
+	if ((nl_index = ft_nl_index(str)) == 0 || nl_index == ft_strlen(str))
 	{
 		str = ft_send_clean(line, str, ft_strlen(str));
 		free(str);
@@ -128,9 +124,8 @@ int		get_next_line(int fd, char **line)
 	}
 	else
 		str = ft_send_clean(line, str, nl_index);
-	//printf("str: %s\nnl_index: %i\nbuff:%s", str, nl_index, buff);
-	if (len == 0 && str == NULL)
-		return 0;
+	if ((*line)[0] == 0 && len == 0)
+		return (0);
 	return (1);
 }
 
@@ -139,22 +134,22 @@ int main(int ac, char **av)
 	char *s = NULL;
 	int fd;
 	(void)ac;
-	int n = 10;
+	int n = 0;
 	int ret;
 	(void)n;
 	(void)av;
 
 	if ((fd = open(av[1], O_RDONLY)) == -1)
 		return (-1);
-	while ((ret = get_next_line(fd, &s)) != 0)
+	while ((ret = get_next_line(fd, &s)) == 1)
 	{
 		if (ret == -1)
 			return -1;
 		printf("line: %s\n", s);
+		//printf("n = %i\n", n++);
 		free(s);
 		s = NULL;
 	}
-	//printf("line: %s\n", s);
 	//	system("leaks a.out");
 	return (0);
 }

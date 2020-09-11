@@ -6,7 +6,7 @@
 /*   By: ngenadie <ngenadie@42.fr>                    +#+  +:+       +#+      */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/13 20:17:46 by ngenadie          #+#    #+#             */
-/*   Updated: 2020/09/10 18:49:25 by ngenadie         ###   ########.fr       */
+/*   Updated: 2020/09/11 16:51:30 by ngenadie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -112,18 +112,28 @@ int		get_next_line(int fd, char **line)
 	if (str == NULL)
 		if ((!(str = malloc(BUFFER_SIZE + 1)) && !(str[BUFFER_SIZE] = 0)) || BUFFER_SIZE <= 0)
 			return (-1);
+	printf("--------------------------------------------\n");
+	printf("str_bw: %s\n", str);
 	while ((nl_index = ft_nl_index(str)) == 0 &&
 			(len = read(fd, buff, BUFFER_SIZE)) > 0)
 		if (!(str = ft_realloc(str, buff, len)))
 			return (-1);
+	printf("str_aw: %s\n", str);
 	if ((nl_index = ft_nl_index(str)) == 0 || nl_index == ft_strlen(str))
 	{
 		str = ft_send_clean(line, str, ft_strlen(str));
+		str[0] = 0;
 		free(str);
 		str = NULL;
+		printf("-----------------\n");
+		printf("str_bri: %s\n", str);
 	}
 	else
+	{
 		str = ft_send_clean(line, str, nl_index);
+		printf("-----------------\n");
+		printf("str_bre: %s\n", str);
+	}
 	if ((*line)[0] == 0 && len == 0)
 		return (0);
 	return (1);

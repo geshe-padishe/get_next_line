@@ -6,7 +6,7 @@
 /*   By: ngenadie <ngenadie@42.fr>                    +#+  +:+       +#+      */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/13 20:17:46 by ngenadie          #+#    #+#             */
-/*   Updated: 2020/09/13 16:39:48 by ngenadie         ###   ########.fr       */
+/*   Updated: 2020/09/15 20:48:31 by ngenadie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,7 +106,6 @@ int		get_next_line(int fd, char **line)
 	char		buff[BUFFER_SIZE + 1];
 	static char	*str = NULL;
 	int			len;
-	static int count = 0;
 
 	len = 1;
 	if (str == NULL)
@@ -135,32 +134,34 @@ int		get_next_line(int fd, char **line)
 		//printf("-----------------\n");
 		//printf("str_bre: %s\n", str);
 	}
-	if ((*line)[0] == 0 && len == 0)
+	if (str == NULL && len == 0)
 		return (0);
 	return (1);
 }
-
+//
 //int main(int ac, char **av)
 //{
-//	char *s = NULL;
-//	int fd;
-//	(void)ac;
-//	int n = 0;
-//	int ret;
-//	(void)n;
-//	(void)av;
+// char *s = NULL;
+// int fd;
+// (void)ac;
+// int n = 0;
+// int ret;
+// (void)n;
+// (void)av;
+// int i = 1;
 //
-//	if ((fd = open(av[1], O_RDONLY)) == -1)
-//		return (-1);
-//	while ((ret = get_next_line(fd, &s)) == 1)
-//	{
-//		if (ret == -1)
-//			return -1;
-//		printf("line: %s\n", s);
-//		//printf("n = %i\n", n++);
-//		free(s);
-//		s = NULL;
-//	}
-//	//	system("leaks a.out");
-//	return (0);
+// if ((fd = open(av[1], O_RDONLY)) == -1)
+// 	return (-1);
+// while ((ret = get_next_line(fd, &s)) == 1)
+// {
+// 	if (ret == -1)
+// 		return -1;
+// 	printf("line %i: %s\n", i, s);
+// 	//printf("n = %i\n", n++);
+// 	free(s);
+// 	s = NULL;
+//	i++;
+// }
+// //	system("leaks a.out");
+// return (0);
 //}

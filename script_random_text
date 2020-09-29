@@ -3,10 +3,9 @@ do
 	printf "%d", "$i"
 	rm -rf PAGE PAGE2
 	rm -rf file
-	./file_gen file 100 10 > PAGE
+	./file_gen file 100 2 > PAGE
 	nohup ./a.out file > PAGE2
-	leaks a.out
-	DIFF=$(diff PAGE PAGE2) > DIFF
+	diff PAGE PAGE2 > DIFF
 	if [ -s DIFF ]
 	then
 		printf "\n_____________________________\n DIFF = "

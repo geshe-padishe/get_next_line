@@ -6,7 +6,7 @@
 /*   By: ngenadie <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/21 21:08:48 by ngenadie          #+#    #+#             */
-/*   Updated: 2020/09/29 22:37:56 by ngenadie         ###   ########.fr       */
+/*   Updated: 2020/10/08 00:34:38 by ngenadie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,33 +40,6 @@ int		ft_strlen(char *str)
 	return (i);
 }
 
-char	*ft_send_clean(char **s, char *str, int nl_index)
-{
-	int		i;
-	char	*new_str;
-
-	i = 0;
-	new_str = NULL;
-	*s = (char*)malloc(sizeof(char) * (nl_index + 1));
-	while (str[i] && str[i] != '\n')
-	{
-		(*s)[i] = str[i];
-		i++;
-	}
-	(*s)[i] = '\0';
-	i = 0;
-	new_str = (char*)malloc(sizeof(char) * (ft_strlen(str) - nl_index + 1));
-	while (str[nl_index + i])
-	{
-		new_str[i] = str[nl_index + i];
-		i++;
-	}
-	new_str[i] = '\0';
-	free(str);
-	str = NULL;
-	return (new_str);
-}
-
 char	*ft_realloc(char *str, char *buff, int len)
 {
 	char	*new_str;
@@ -88,6 +61,33 @@ char	*ft_realloc(char *str, char *buff, int len)
 	{
 		new_str[i] = buff[j];
 		j++;
+		i++;
+	}
+	new_str[i] = '\0';
+	free(str);
+	str = NULL;
+	return (new_str);
+}
+
+char	*ft_send_clean(char **s, char *str, int nl_index)
+{
+	int		i;
+	char	*new_str;
+
+	i = 0;
+	new_str = NULL;
+	*s = (char*)malloc(sizeof(char) * (nl_index + 1));
+	while (str[i] && str[i] != '\n')
+	{
+		(*s)[i] = str[i];
+		i++;
+	}
+	(*s)[i] = '\0';
+	i = 0;
+	new_str = (char*)malloc(sizeof(char) * (ft_strlen(str) - nl_index + 1));
+	while (str[nl_index + i])
+	{
+		new_str[i] = str[nl_index + i];
 		i++;
 	}
 	new_str[i] = '\0';
@@ -125,35 +125,36 @@ int		get_next_line(int fd, char **line)
 	}
 	else
 		str = ft_send_clean(line, str, nl_index);
-	if (*line[0] == 0 && len == 0)
+	if (str == NULL && len == 0)
 		return (0);
 	return (1);
 }
-
-int main(int ac, char **av)
-{
- char *s = NULL;
- int fd;
- (void)ac;
- int n = 0;
- int ret;
- (void)n;
- (void)av;
- int i = 1;
-
- if ((fd = open(av[1], O_RDONLY)) == -1)
- 	return (-1);
- while ((ret = get_next_line(fd, &s)) == 1)
- {
- 	if (ret == -1)
- 		return -1;
- 	printf("ret: %i, line %i: %s\n", ret, i, s);
- 	//printf("n = %i\n", n++);
- 	free(s);
- 	s = NULL;
-	i++;
- }
- printf("ret: %i", ret);
- //	system("leaks a.out");
- return (ret);
-}
+//
+//
+//int main(int ac, char **av)
+//{
+//	char *s = NULL;
+//	int fd;
+//	(void)ac;
+//	int n = 0;
+//	int ret;
+//	(void)n;
+//	int i = 1;
+//	
+//	if ((fd = open(av[1], O_RDONLY)) == -1)
+//		return (-1);
+//	while ((ret = get_next_line(fd, &s)) == 1)
+//	{
+//		if (ret == -1)
+//			return -1;
+//		printf("-----------------------------------------------------------\n");
+//		printf("ret: %i, line %i: %s\n", ret, i, s);
+//		//printf("n = %i\n", n++);
+//		free(s);
+//		i++;
+//	}
+//	printf("ret: %i", ret);
+//	//	system("leaks a.out");
+//	return (ret);
+//}
+//

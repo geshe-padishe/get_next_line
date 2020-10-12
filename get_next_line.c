@@ -6,7 +6,7 @@
 /*   By: ngenadie <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/21 21:08:48 by ngenadie          #+#    #+#             */
-/*   Updated: 2020/10/08 00:34:38 by ngenadie         ###   ########.fr       */
+/*   Updated: 2020/10/12 22:20:21 by ngenadie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -125,11 +125,11 @@ int		get_next_line(int fd, char **line)
 	}
 	else
 		str = ft_send_clean(line, str, nl_index);
-	if (str == NULL && len == 0)
+	if (len == 0 && *line[0] == 0 && str == NULL)
 		return (0);
 	return (1);
 }
-//
+
 //
 //int main(int ac, char **av)
 //{
@@ -139,16 +139,15 @@ int		get_next_line(int fd, char **line)
 //	int n = 0;
 //	int ret;
 //	(void)n;
-//	int i = 1;
+//	int i = 0;
 //	
 //	if ((fd = open(av[1], O_RDONLY)) == -1)
 //		return (-1);
-//	while ((ret = get_next_line(fd, &s)) == 1)
+//	while ((ret = get_next_line(fd, &s)) == 1 && i < 70)
 //	{
 //		if (ret == -1)
 //			return -1;
-//		printf("-----------------------------------------------------------\n");
-//		printf("ret: %i, line %i: %s\n", ret, i, s);
+//		printf("%s\n", s);
 //		//printf("n = %i\n", n++);
 //		free(s);
 //		i++;

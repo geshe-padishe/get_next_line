@@ -6,7 +6,7 @@
 /*   By: ngenadie <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/21 21:08:48 by ngenadie          #+#    #+#             */
-/*   Updated: 2020/10/12 22:20:21 by ngenadie         ###   ########.fr       */
+/*   Updated: 2020/10/13 15:02:29 by nikotikch        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -147,7 +147,7 @@ int		get_next_line(int fd, char **line)
 //	{
 //		if (ret == -1)
 //			return -1;
-//		printf("%s\n", s);
+//		printf("i: %i, ret: %i, line: %s\n", i, ret, s);
 //		//printf("n = %i\n", n++);
 //		free(s);
 //		i++;
